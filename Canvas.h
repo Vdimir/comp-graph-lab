@@ -5,25 +5,14 @@
 #ifndef GRAPH_CANVAS_H
 #define GRAPH_CANVAS_H
 
-#include <vector>
-
-#include <GL/glfw.h>
-#include "Primirives.h"
-
-class Canvas {
-    typedef float coord;
-    std::vector<Line<coord> > _lines;
-
-
+class ICanvas {
 public:
-    Canvas();
-    ~Canvas();
+    virtual void line(float x1, float y1, float x2, float y2 ) const = 0;
+};
 
-    Canvas& addLine(Line<coord>);
-    Canvas& addLine(coord x1, coord y1, coord x2, coord y2);
-
-    void draw() const;
-
+class IDrawable {
+public:
+    virtual void draw(const ICanvas& canvas) const = 0;
 };
 
 
