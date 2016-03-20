@@ -2,25 +2,38 @@
 #include "Graphics.h"
 #include "Shape.h"
 
+#include <fstream>
+#include <string>
+#include <sstream>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-IShape* myShape() {
-    auto bottom = new Polygon();
-    bottom->addVertex(0.0, 0.0, 0.0)
-            .addVertex(0.9, 0.0, 0.0)
-            .addVertex(0.9, 0.9, 0.0)
-            .addVertex(0.0, 0.9, 0.0);
-
-
-    auto top = new Polygon();
-    top->addVertex(0.0, 0.0, 1.0)
-            .addVertex(0.9, 0.0, 1.0)
-            .addVertex(0.9, 0.9, 1.0)
-            .addVertex(0.0, 0.9, 1.0);
+IShape* loadShapeFromFile(const char* fname) {
+    std::ifstream fin(fname);
+    if (!fin.is_open()) {
+        throw "error open file";
+    }
 
     ShapeCopm* shape = new ShapeCopm();
-    shape->add(top).add(bottom);
+    auto poly = new Polygon();
+    while (!fin.eof()) {
+        std::string line;
+        std::getline(fin, line);
+
+        if (line.empty()) {
+            shape->add(poly);
+            poly = new Polygon();
+            continue;
+        }
+
+        std::stringstream ss(line);
+        float x,y,z;
+        ss >> x >> y >> z;
+        poly->addVertex(x,y,z);
+    }
+
+    fin.close();
     return shape;
 }
 
@@ -33,7 +46,7 @@ void displayLoop()
     Model[2] = glm::vec4(-1/1.73, -1/1.41, 0, 0.0);
     Model[3] = glm::vec4(0.0, 0.0, 0.0, 1.0);
 
-    auto shape = myShape();
+    auto shape = loadShapeFromFile("shape.txt");
     *shape *= Model;
 
     const Graphics& scene = Graphics::getInstance();
@@ -46,6 +59,7 @@ void displayLoop()
 }
 
 int main (int argc, char **argv) {
+
     displayLoop();
 
     std::cout << "Done";
