@@ -1,7 +1,7 @@
 
-#include "Graphics.h"
-#include "Shape.h"
-#include "Transform.h"
+#include "src/Graphics.h"
+#include "src/Shape.h"
+#include "src/Transform.h"
 
 #include <fstream>
 #include <string>
@@ -41,7 +41,7 @@ IShape* loadShapeFromFile(const char* fname) {
 
 void displayLoop()
 {
-    auto shape = std::unique_ptr<IShape>(loadShapeFromFile("shape.txt"));
+    auto shape = std::unique_ptr<IShape>(loadShapeFromFile("resources/shape.txt"));
 
     const Graphics& scene = Graphics::getInstance();
 
