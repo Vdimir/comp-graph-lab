@@ -53,3 +53,7 @@ ShapeCopm::~ShapeCopm() {
     }
     shapes.clear();
 }
+
+void IShape::transform(const glm::mat4 &right) {
+    *this *= right;
+}

@@ -1,14 +1,16 @@
 
 #include "Graphics.h"
 #include "Shape.h"
+#include "Transform.h"
 
 #include <fstream>
 #include <string>
 #include <sstream>
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <memory>
 
+#define PI 3.1415f
 IShape* loadShapeFromFile(const char* fname) {
     std::ifstream fin(fname);
     if (!fin.is_open()) {
@@ -39,23 +41,23 @@ IShape* loadShapeFromFile(const char* fname) {
 
 void displayLoop()
 {
-
-    glm::mat4 Model;
-    Model[0] = glm::vec4(2/2.44, 0.0, 0.0, 0.0);
-    Model[1] = glm::vec4(-1/2.44, 1/1.41, 0.0, 0.0);
-    Model[2] = glm::vec4(-1/1.73, -1/1.41, 0, 0.0);
-    Model[3] = glm::vec4(0.0, 0.0, 0.0, 1.0);
-
-    auto shape = loadShapeFromFile("shape.txt");
-    *shape *= Model;
+    auto shape = std::unique_ptr<IShape>(loadShapeFromFile("shape.txt"));
 
     const Graphics& scene = Graphics::getInstance();
+
+    shape->transform(TransfromMatrixBuilder()
+                         .moveX(-0.5f)
+                         .perspectiveX(-0.3f)
+                         .perspectiveY(-0.2f)
+                         .rotateX(PI / 4.0f)
+                         .rotateY(-PI / 4.0f)
+                         .scaleZ(0.6f)
+                         .getMat());
 
     while(scene.update()) {
         shape->draw(scene.getCanvas());
     }
 
-    delete shape;
 }
 
 int main (int argc, char **argv) {
