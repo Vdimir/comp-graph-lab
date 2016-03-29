@@ -3,7 +3,7 @@ project(graph)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES main.cpp src/Graphics.cpp src/Graphics.h src/Canvas.h src/Shape.h src/Shape.cpp src/Transform.h)
+set(SOURCE_FILES main.cpp src/Graphics.cpp src/Graphics.h src/Canvas.h src/Shape.h src/Shape.cpp src/Transform.h src/Transform.cpp)
 add_executable(graph ${SOURCE_FILES})
 
 configure_file(resources/shape.txt resources/shape.txt COPYONLY)

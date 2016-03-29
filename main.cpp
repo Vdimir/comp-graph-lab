@@ -6,11 +6,11 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <vector>
 
 #include <glm/glm.hpp>
 #include <memory>
 
-#define PI 3.1415f
 IShape* loadShapeFromFile(const char* fname) {
     std::ifstream fin(fname);
     if (!fin.is_open()) {
@@ -41,21 +41,28 @@ IShape* loadShapeFromFile(const char* fname) {
 
 void displayLoop()
 {
-    auto shape = std::unique_ptr<IShape>(loadShapeFromFile("resources/shape.txt"));
-
     const Graphics& scene = Graphics::getInstance();
 
-    shape->transform(TransfromMatrixBuilder()
-                         .moveX(-0.5f)
-                         .perspectiveX(-0.3f)
-                         .perspectiveY(-0.2f)
-                         .rotateX(PI / 4.0f)
-                         .rotateY(-PI / 4.0f)
-                         .scaleZ(0.6f)
-                         .getMat());
+    std::vector<std::unique_ptr<IShape>> shapes;
+    for (int i = 0; i < 11; ++i) {
+        shapes.push_back(std::unique_ptr<IShape>(loadShapeFromFile("resources/shape.txt")));
+    }
+    shapes[0]->transform(getPreset1());
+    shapes[1]->transform(getPreset2());
+    shapes[2]->transform(getPreset3());
+    shapes[3]->transform(getPreset4());
+    shapes[4]->transform(getPreset5());
+    shapes[5]->transform(getPreset6());
+    shapes[6]->transform(getPreset7());
+    shapes[7]->transform(getPreset8());
+    shapes[8]->transform(getPreset9());
+    shapes[9]->transform(getPreset10());
+    shapes[10]->transform(getPreset11());
 
     while(scene.update()) {
-        shape->draw(scene.getCanvas());
+        for (auto s = shapes.begin(); s != shapes.end(); s++) {
+            (*s)->draw(scene.getCanvas());
+        }
     }
 
 }

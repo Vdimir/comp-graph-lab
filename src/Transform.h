@@ -65,6 +65,16 @@ inline glm::mat4 perspectiveMat(float p=0, float q=0, float r=0) {
     return m;
 }
 
+
+inline glm::mat4 obliqueMat(float f, float a) {
+    glm::mat4 m;
+    m[0] = glm::vec4(1, 0, 0, 0);
+    m[1] = glm::vec4(0, 1, 0, 0);
+    m[2] = glm::vec4(-f*cos(a), f*sin(a), 1, 0);
+    m[3] = glm::vec4(0, 0, 0, 1);
+    return m;
+}
+
 class TransfromMatrixBuilder {
     glm::mat4 matrix;
 public:
@@ -130,10 +140,28 @@ public:
         return *this;
     }
 
+
+    TransfromMatrixBuilder& obliq(float f, float a) {
+        this->matrix *= obliqueMat(f, a);
+        return *this;
+    }
+
     glm::mat4 getMat() {
         return matrix;
     }
 };
 
+#define PI 3.1415f
 
+glm::mat4 getPreset1();
+glm::mat4 getPreset2();
+glm::mat4 getPreset3();
+glm::mat4 getPreset4();
+glm::mat4 getPreset5();
+glm::mat4 getPreset6();
+glm::mat4 getPreset7();
+glm::mat4 getPreset8();
+glm::mat4 getPreset9();
+glm::mat4 getPreset10();
+glm::mat4 getPreset11();
 #endif //GRAPH_TRANSFORM_H
